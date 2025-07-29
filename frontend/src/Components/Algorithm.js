@@ -78,7 +78,7 @@ export default function YourSong()
       <textarea
         className="form-control dark-focus"
         rows="4"
-        placeholder="Type your thoughts here..."
+        placeholder="Type your your lyrics here..."
         style={{ width: "500px" }}
         value={inputText}
         onChange={(e)=>setInputText(e.target.value)}
