@@ -1,8 +1,49 @@
 import React from "react";
 import "./Algo.css";
-
+import { useState, useEffect } from "react";
+import axios from 'axios';
 export default function YourSong()
 {
+    const [model, setModel] = useState("");
+    const [inputText, setInputText] = useState("");
+    const [artists, setArtists] = useState([]);
+    const [renderKey, setRenderKey] = useState(0);
+
+    useEffect(() => {
+        setRenderKey(prev => prev + 1);
+
+  // Trigger reflow to reset animation
+  const letters = document.querySelectorAll(".fade-letter");
+  letters.forEach(el => {
+    el.classList.remove("fade-letter"); // remove
+    void el.offsetWidth; // trigger reflow
+    el.classList.add("fade-letter"); // re-add
+  });
+}, [artists]);
+
+    const handleSubmit = async () =>{
+      if (inputText.trim() !== ""){
+        try {
+          const response = await axios.post("http://localhost:8000/bgepost",{
+            text:inputText,
+          });
+          if (response.data.artists){
+            setArtists(response.data.artists);
+          }
+          // else{
+          //   setArti
+          // }
+        }catch(error){
+                console.error("Axios error:", error);
+      const errorMessage = error.response?.data?.error || error.message;
+      setArtists(["Error: " + errorMessage]);
+
+        }
+      } else{
+        alert("please select the correct model");
+      }
+    }
+  
     return(
         <>
             <div className="container d-flex flex-column align-items-center mt-3 card-box" >
@@ -27,14 +68,9 @@ export default function YourSong()
                    <div className="d-flex justify-content-center mt-4">
     {/* Dropdown */}
     <div className="me-3">
-      <select
-        className="form-select"
-        style={{ width: "100px" }}
-      >
-        <option>Model</option>
-        <option>MiniLM</option>
-        <option>Big-E-small</option>
-      </select>
+      <button className="custom-button " onClick={handleSubmit}>
+    Search
+  </button>
     </div>
 
     {/* Textarea */}
@@ -44,12 +80,14 @@ export default function YourSong()
         rows="4"
         placeholder="Type your thoughts here..."
         style={{ width: "500px" }}
+        value={inputText}
+        onChange={(e)=>setInputText(e.target.value)}
       ></textarea>
     </div>
-   
+
 
   </div>
-
+      
            
 
 
@@ -60,10 +98,29 @@ export default function YourSong()
                     <p style={{fontSize:'18px'}}className="my-3 text-center"> 
                 Quick results using FAISS and HNSW </p> 
                 <div className="mt-4">
-                      <h1 style={{ marginLeft:'70px',fontSize: '24px', textAlign: 'Left' }}>
+                      <h1 style={{ marginLeft:'120px',fontSize: '24px', textAlign: 'Left' }}>
     Most likely artists  </h1>  
-    <p style={{fontSize: '20px', marginLeft:'70px', textAlign:'Left'}}> new element </p>
-    <p style={{fontSize: '20px', marginLeft:'70px', textAlign:'Left'}}> new element </p>
+    {/* {<p style={{fontSize: '20px', marginLeft:'70px', textAlign:'Left'}}> new element </p>
+    <p style={{fontSize: '20px', marginLeft:'70px', textAlign:'Left'}}> new element </p>} */}
+    {artists.map((artist, index) => (
+  <div key={`${renderKey}-${index}`}  style={{ marginLeft: '120px', textAlign: 'left' }}>
+    {artist.split('').map((letter, i) => (
+      <span
+        key={i}
+        className="fade-letter"
+        style={{
+          animation: `fadeOnly 0.4s ease forwards`,
+          animationDelay: `${i * 0.1}s`,
+          display: 'inline-block',
+          fontSize: '20px'
+        }}
+      >
+        {letter}
+      </span>
+    ))}
+  </div>
+))}
+
     
                 </div>
                     </div>

@@ -8,9 +8,41 @@
 .icon-hover-spin:hover {
   animation: fa-spin 1s infinite linear;
 }
+@keyframes fadeOnly {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-letter {
+  opacity: 0; /* Ensure it starts invisible */
+}
+
 
 .dark-focus{
       border: 2px solid #212529 !important;
   box-shadow: none !important; /* optional: removes the default blue glow */
 
+}
+.custom-button {
+  background-color: #6610f2; /* Bootstrap primary blue */
+  font-family: 'Titillium Web';
+  font-weight: 100;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-weight: bold;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.custom-button:hover {
+  background-color: #0056b3; /* darker blue on hover */
+  transform: scale(1.05);
+  cursor: pointer;
 }

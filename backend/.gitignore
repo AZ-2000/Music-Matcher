@@ -1,0 +1,4 @@
+.env
+vectors.parquet
+vscode_vectors_bge.parquet
+df_25k.parquet
